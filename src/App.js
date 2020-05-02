@@ -77,7 +77,7 @@ class App extends Component {
           <div>
             {this.state.selected ? (
                 <div>
-                  <h4> Photo selected. Give us text to generate meme!</h4>
+                  <h2> Photo selected. Give us text to generate meme!</h2>
                   <input 
                     className='text'
                     type='text' 
@@ -94,27 +94,34 @@ class App extends Component {
                     <br/>
                   )}
                   
-                  <br/>
-                  <br/>
-                  ****************************************************************************************************************
+                  
                 </div>
               ) : (
-                <h4> No photo selected.</h4>
+                <h2> No photo selected.</h2>
               )
+              
             }
+            <br/>
+            <br/>
+            ****************************************************************************************************************
           </div>
         </div>
 
+        <h3>Find your photo</h3>
         <SearchBox
         placeholder='search images'
         handleChange={this.handleChange}
         />
 
+        <br/>
+        <br/>
+        ****************************************************************************************************************
         <div className = "photos">
         {photos.map((photo) => (
           <div key={photo.id}>
             <img alt='photo' src={`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`} />
             <button  type="button" className="select-button" onClick={(e) => this.handleClick(photo.farm, photo.server, photo.id, photo.secret, e)}>Select this</button>
+            {this.state.selected & this.state.photo_id == photo.id ? (<h3>Photo selected. Go back to the top to input text.</h3>):(<br/>)}
           </div>
         ))}
         </div>
