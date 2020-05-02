@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import {SearchBox} from './components/search-box/search-box.component';
 
 import './App.css';
+import Background from './components/background/background.component';
+import Title from './components/title/title.component';
 
 class App extends Component {
   constructor() {
@@ -13,7 +15,11 @@ class App extends Component {
       total: 0,
       searchField: "",
       selected: false,
-      selected_photo: {},
+      generated: false,
+      photo_farm: "",
+      photo_id: "",
+      photo_server: "",
+      photo_secret: "",
       text: ""
     }
 
@@ -41,9 +47,13 @@ class App extends Component {
   }
 
   
-  handleClick(e) {
+  handleClick(farm, server, id, secret, e) {
     e.preventDefault();
     this.setState({selected: true});
+    this.setState({photo_farm: farm});
+    this.setState({photo_server: server});
+    this.setState({photo_id: id});
+    this.setState({photo_secret: secret});
   }
 
   handleText = e => {
@@ -53,6 +63,7 @@ class App extends Component {
   // generate meme when the user clicks on a button
   handleGenerate(e) {
     e.preventDefault();
+    this.setState({generated: true});
   }
 
   render() {
@@ -74,6 +85,15 @@ class App extends Component {
                     onChange={this.handleText}
                   />
                   <button  type="button" className="generate-button" onClick={this.handleGenerate}>Generate meme!</button>
+                  {this.state.generated ? (
+                    // <Background image = "https://images.unsplash.com/photo-1555448248-2571daf6344b?w=1920&q=100">
+                    <Background image = {`https://farm${this.state.photo_farm}.staticflickr.com/${this.state.photo_server}/${this.state.photo_id}_${this.state.photo_secret}.jpg`}>
+                      <Title text={this.state.text} />
+                    </Background>
+                  ): (
+                    <br/>
+                  )}
+                  
                   <br/>
                   <br/>
                   ****************************************************************************************************************
@@ -94,7 +114,7 @@ class App extends Component {
         {photos.map((photo) => (
           <div key={photo.id}>
             <img alt='photo' src={`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`} />
-            <button  type="button" className="select-button" onClick={this.handleClick}>Select this</button>
+            <button  type="button" className="select-button" onClick={(e) => this.handleClick(photo.farm, photo.server, photo.id, photo.secret, e)}>Select this</button>
           </div>
         ))}
         </div>
